@@ -1,7 +1,2 @@
-_output
-.sops
-.ssh
 cue.mod/**
 !cue.mod/*
-manifests
-main.cue
