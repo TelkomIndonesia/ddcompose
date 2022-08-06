@@ -5,19 +5,30 @@ SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 . "$SCRIPT_DIR/env.lib.sh"
 . "$SCRIPT_DIR/sops.lib.sh"
 
-# Decrypt '__sops__.*' files
+COMPOSE_ADD_ENV_FILES="${COMPOSE_ADD_ENV_FILES:-".secret.env"}"
+COMPOSE_SKIP_RSYNC=${COMPOSE_SKIP_RSYNC:-"false"}
+
+# Decrypt '__sops__*' files and prepare statement to remove the decrypted file on exit
 if [[ ! -z "$(sops.find-files)" ]]; then
     sops.bulk-decrypt
     trap sops.bulk-rm-decrypted EXIT
 fi
 
-# load env from .env and generate from md5 of files/folders
-COMPOSE_ADD_ENV_FILES="${COMPOSE_ADD_ENV_FILES:-"$PWD/.secret.env"}"
+# rsync if we are talking to remote docker via ssh
+if [[ "${DOCKER_HOST:-""}" == "ssh://"* ]] && [[ "$COMPOSE_SKIP_RSYNC" != "false" ]]; then
+    rsync -av "${PWD}/" "${DOCKER_HOST#"ssh://"}:${PWD}" \
+        --exclude "__sops__*" \
+        $(for FILE in $COMPOSE_ADD_ENV_FILES; do
+            echo -n "--exclude '$FILE' "
+        done)
+fi
+
+# load additional env
 for FILE in $COMPOSE_ADD_ENV_FILES; do
     env.dotenv "$FILE"
 done
 env.fenv
+export PATH="$SCRIPT_DIR:$PATH"
 
 # execute script
-export PATH="$SCRIPT_DIR:$PATH"
 "$@"
