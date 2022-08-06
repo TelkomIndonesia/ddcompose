@@ -29,8 +29,8 @@ import (
 
 		actions: deploy: {
 			for manifest in manifests {
-				(manifest.name): (manifest.remoteHost): (manifest.remotePath): {
-					rsync: #Rsync & {
+				(manifest.name): (manifest.remoteHost): (manifest.remotePath):
+					#Compose & {
 						"manifest": manifest & {
 							source: client.filesystem."manifests".read.contents
 						}
@@ -38,17 +38,10 @@ import (
 							config:     client.filesystem.".ssh".read.contents
 							privateKey: client.filesystem.".ssh/id_rsa".read.contents
 						}
-						excludes: ["__sops__*"]
-					}
-					compose: #Compose & {
-						manifest: rsync.manifest
-						ssh:      rsync.ssh
 						if client.filesystem.".sops/age/keys.txt" != _|_ {
 							sops: age: client.filesystem.".sops/age/keys.txt".read.contents
 						}
-						env: "_RSYNC_EXIT": "\(rsync.exit)"
 					}
-				}
 			}
 		}
 	}

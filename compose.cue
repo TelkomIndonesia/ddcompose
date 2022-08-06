@@ -48,6 +48,7 @@ _#compose: {
 		export: directories: "/tmp/config": _
 	}
 
+	env: COMPOSE_SKIP_RSYNC: "true"
 	mounts: config: {
 		dest:     "/tmp/config"
 		contents: _config.export.directories."/tmp/config"
