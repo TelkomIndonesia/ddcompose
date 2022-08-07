@@ -35,11 +35,19 @@ import (
 }
 
 #SOPS: {
-	age?: dagger.#Secret
+	config?: dagger.#FS
+	age?:    dagger.#Secret
 
 	dest?: string
 	if dest != _|_ {
 		mounts: {
+			if config != _|_ {
+				"sops-config": {
+					dest:     ".sops.yaml"
+					contents: config
+					source:   ".sops.yaml"
+				}
+			}
 			if age != _|_ {
 				"sops-age": {
 					"dest":   "\(dest)/age/keys.txt"
