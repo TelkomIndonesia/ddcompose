@@ -71,7 +71,10 @@ import (
 						contents: core.#TempDir
 					}
 				}
-				env: "TF_VAR_manifests_dir": _manifestsDir
+				env: {
+					"TF_VAR_manifests_dir": _manifestsDir
+					"TF_VAR_temporary_dir": mounts."tmp".dest
+				}
 				entrypoint: []
 				command: name: mounts."terraform.sh".dest
 			},
