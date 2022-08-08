@@ -14,5 +14,5 @@ terraform init
 terraform apply --auto-approve
 
 if [ -f ".sops.yaml" ]; then
-    sops --input-type "json" -output "__sops__terraform.tfstate" -encrypt "terraform.tfstate"
+    sops --input-type "json" -output "__sops__terraform.tfstate" --encrypted-regex "^attributes$" -encrypt "terraform.tfstate"
 fi
