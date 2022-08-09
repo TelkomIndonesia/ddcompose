@@ -2,5 +2,7 @@ services:
   tail:
     image: alpine
     restart: unless-stopped
+    environment:
+      __FILE_ce005df09f91dde391f6a6c57899c3c0: # config.yml
     entrypoint: ["tail","-f"]
     command: /dev/null
