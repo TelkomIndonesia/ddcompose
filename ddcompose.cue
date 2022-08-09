@@ -26,8 +26,9 @@ import (
 			".ssh/id_rsa": read: contents: dagger.#Secret
 
 			if sops.config {
-				".": read: {
+				".sops.yaml": read: {
 					contents: dagger.#FS
+					path:     "."
 					include: [".sops.yaml"]
 				}
 			}
@@ -41,18 +42,15 @@ import (
 		}
 
 		if builders {
-			actions: build: {
-				write: bool | *false
-				#Terraform & {
-					manifests: client.filesystem."manifests".read.contents
-					source:    client.filesystem."builders".read.contents
-					"sops": {
-						if sops.config {
-							config: client.filesystem.".".read.contents
-						}
-						if sops.age {
-							age: client.filesystem.".sops/age/keys.txt".read.contents
-						}
+			actions: build: #Terraform & {
+				manifests: client.filesystem."manifests".read.contents
+				source:    client.filesystem."builders".read.contents
+				"sops": {
+					if sops.config {
+						config: client.filesystem.".sops.yaml".read.contents
+					}
+					if sops.age {
+						age: client.filesystem.".sops/age/keys.txt".read.contents
 					}
 				}
 			}
@@ -79,9 +77,13 @@ import (
 		client: filesystem: {
 			"_output": write: contents: actions.fenvname.export.directories."/tmp/fenv.txt"
 			if builders {
-				if actions.build.write {
-					"builders": write: contents:  actions.build.output.source
-					"manifests": write: contents: actions.build.output.manifests
+				"builders_output": write: {
+					contents: actions.build.output.source
+					path:     "builders"
+				}
+				"manifests_output": write: {
+					contents: actions.build.output.manifests
+					path:     "manifests"
 				}
 			}
 		}

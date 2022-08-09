@@ -6,8 +6,10 @@ A [Dagger](https://dagger.io/) module for managing and deploying [Docker Compose
 
 - [Initiate](https://docs.dagger.io/1239/making-reusable-package#create-the-base-dagger-project) a dagger project.
 - Create `manifests` directory under root fo the project directory and puts all docker compose and all related files there. You can create as many subfolder as needed.
+- Create `.ssh` folder that _at minimum_ contains ssh private key named `id_rsa`.
 - Import and unify the [`#DDCompose.plan`](./ddcompose.cue#L15) with [`dagger.#Plan`](https://docs.dagger.io/1202/plan)
 - Fill [`#DDCompose.manifests`] with information related to all manifests in `manifests` directory. See [#Manifest](./input.cue#L8) for all avaialable fields.
+- By default, the module will load `.sops/age/keys.txt` that contains [age](https://github.com/FiloSottile/age) private key. This can be disabled by setting [`#DDCompose.sops.age`](./ddcompose.cue#L11) to false
 
 Example:
 
@@ -41,3 +43,5 @@ dagger.#Plan & (ddcompose.#DDCompose & { manifests: [
         },
     ]}).plan
 ```
+
+checkout [examples](./examples/) for more sample on how to use this module.
