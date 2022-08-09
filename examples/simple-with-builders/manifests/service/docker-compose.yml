@@ -1,0 +1,6 @@
+services:
+  tail:
+    image: alpine
+    restart: unless-stopped
+    entrypoint: ["tail","-f"]
+    command: /dev/null

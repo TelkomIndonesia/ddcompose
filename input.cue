@@ -4,19 +4,32 @@ import (
 	"dagger.io/dagger"
 )
 
+// Definition of docker-compose manifest
 #Manifest: {
+	// The root of manifests folder that contain **all** manifests definition
 	source: dagger.#FS
-	name:   string
-	path:   string
+
+	// The name of this particular manifest
+	name: string
+	// Relative path in the `source` that contains the manifest files
+	path: string
+	// Local files or folder to be excluded from synchronization to remote host
 	excludes: [...string]
-	present:    bool | *true
+	// When `present` is false, the manifest will be destroyed via `docker compose down`
+	present: bool | *true
+	// The remote host where the manifest files will be sync to and deployed
 	remoteHost: string
+	// The remote path where the manifest files will be sync to
 	remotePath: string
+	// Additional environment to be passed to `docker compose`
 	env: [envname = string]: string | dagger.#Secret
 }
 
+// SSH Connection config
 #SSH: {
-	config:     dagger.#FS
+	// Folder contains SSH-related files that is usually found on ~/.ssh
+	config: dagger.#FS
+	// the private key
 	privateKey: dagger.#Secret
 
 	dest?: string
@@ -34,9 +47,12 @@ import (
 	}
 }
 
+// SOPS information
 #SOPS: {
+	// Folder containing ".sops.yaml"
 	config?: dagger.#FS
-	age?:    dagger.#Secret
+	// 'age' encryption key used to decrypt sops-encrypted files
+	age?: dagger.#Secret
 
 	dest?: string
 	if dest != _|_ {
