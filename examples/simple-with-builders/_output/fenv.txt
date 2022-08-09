@@ -1,0 +1,4 @@
+manifests/service/config.yml => __FILE_ce005df09f91dde391f6a6c57899c3c0
+manifests/service/docker-compose.yml => __FILE_781cc7215bc73af2564db69684d7f34b
+manifests => __FOLDER_a11d1078b1b1f2e3bdea27312f6ba513
+manifests/service => __FOLDER_0d5886887371f4947334e2214a64568d
