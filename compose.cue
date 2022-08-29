@@ -56,7 +56,7 @@ _#compose: {
 	command: {
 		name: "docker"
 		if manifest.present {
-			args: ["compose", "up", "-d"]
+			args: ["compose", "up", "-d", "--wait"]
 		}
 		if !manifest.present {
 			args: ["compose", "down"]
