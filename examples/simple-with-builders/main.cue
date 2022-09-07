@@ -15,4 +15,10 @@ dagger.#Plan & (ddcompose.#DDCompose & {
 			remoteHost: "host1.example.test"
 			remotePath: "/opt/docker/awesome-service"
 		},
+		{
+			name:       "awesome-service"
+			path:       "service"
+			remoteHost: "host2.example.test"
+			remotePath: "/opt/docker/awesome-service"
+		},
 	]}).plan
