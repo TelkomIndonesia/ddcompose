@@ -1,4 +1,10 @@
-manifests/service/config.yml => __FILE_ce005df09f91dde391f6a6c57899c3c0
-manifests/service/docker-compose.yml => __FILE_781cc7215bc73af2564db69684d7f34b
-manifests => __FOLDER_a11d1078b1b1f2e3bdea27312f6ba513
-manifests/service => __FOLDER_0d5886887371f4947334e2214a64568d
+=== awesome-service__host1.example.test___opt_docker_awesome-service ===
+./config.yml => __FILE_a8a70b57aceff7dd75fcca01135b59e2
+./docker-compose.yml => __FILE_abc00eecb4760247f459609bea48577c
+. => __FOLDER_5058f1af8388633f609cadb75a75dc9d
+
+=== awesome-service__host2.example.test___opt_docker_awesome-service ===
+./config.yml => __FILE_a8a70b57aceff7dd75fcca01135b59e2
+./docker-compose.yml => __FILE_abc00eecb4760247f459609bea48577c
+. => __FOLDER_5058f1af8388633f609cadb75a75dc9d
+

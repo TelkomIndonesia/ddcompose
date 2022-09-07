@@ -38,7 +38,13 @@ import (
 		}
 
 		actions: fenvname: #FenvName & {
-			source: client.filesystem."manifests".read.contents
+			"manifests": [
+				for manifest in manifests {
+					manifest & {
+						source: client.filesystem."manifests".read.contents
+					}
+				},
+			]
 		}
 
 		if builders {
@@ -75,7 +81,7 @@ import (
 		}
 
 		client: filesystem: {
-			"_output": write: contents: actions.fenvname.export.directories."/tmp/fenv.txt"
+			"_output/fenv.txt": write: contents: actions.fenvname.export.files."/tmp/fenv.txt"
 			if builders {
 				"builders_output": write: {
 					contents: actions.build.output.source
