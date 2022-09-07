@@ -26,7 +26,7 @@ import (
 			name: "bash"
 			flags: "-c": """
 				set -euo pipefail
-				
+
 				for DIR in */ ; do
 					cd "$DIR"
 					echo "=== $(basename $DIR) ===" >> /tmp/fenv.txt
@@ -36,6 +36,6 @@ import (
 				done
 				"""
 		}
-		export: files: "/tmp/fenv.txt": _
+		export: directories: "/tmp/fenv.txt": _
 	}
 }
