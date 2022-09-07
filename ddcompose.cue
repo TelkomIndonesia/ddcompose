@@ -81,7 +81,7 @@ import (
 		}
 
 		client: filesystem: {
-			"_output/fenv.txt": write: contents: actions.fenvname.export.files."/tmp/fenv.txt"
+			"_output": write: contents: actions.fenvname.export.directories."/tmp/fenv.txt"
 			if builders {
 				"builders_output": write: {
 					contents: actions.build.output.source
