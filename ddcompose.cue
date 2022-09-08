@@ -36,7 +36,7 @@ import (
 				".sops/age/keys.txt": read: contents: dagger.#Secret
 			}
 		}
-		client: env: COMPOSE_FORCE_EXEC?: string
+		client: env: COMPOSE_FORCE_EXEC: string | *"false"
 
 		actions: fenvname: #FenvName & {
 			"manifests": [
@@ -77,9 +77,7 @@ import (
 						if sops.age {
 							sops: age: client.filesystem.".sops/age/keys.txt".read.contents
 						}
-						if client.env.COMPOSE_FORCE_EXEC != _|_ {
-							always: true
-						}
+						always: client.env.COMPOSE_FORCE_EXEC != "false"
 					}
 			}
 		}
