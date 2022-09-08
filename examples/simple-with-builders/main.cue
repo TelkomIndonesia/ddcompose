@@ -7,6 +7,10 @@ import (
 )
 
 dagger.#Plan & (ddcompose.#DDCompose & {
+	sops: {
+		config: true
+		age:    true
+	}
 	builders: true
 	manifests: [
 		{

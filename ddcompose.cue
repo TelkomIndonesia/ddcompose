@@ -7,8 +7,8 @@ import (
 #DDCompose: {
 	manifests: [...#Manifest]
 	sops: {
-		config: bool | *true
-		age:    bool | *true
+		config: bool | *false
+		age:    bool | *false
 	}
 	builders: bool | *false
 
@@ -36,6 +36,7 @@ import (
 				".sops/age/keys.txt": read: contents: dagger.#Secret
 			}
 		}
+		client: env: COMPOSE_FORCE_EXEC?: string
 
 		actions: fenvname: #FenvName & {
 			"manifests": [
@@ -75,6 +76,9 @@ import (
 						}
 						if sops.age {
 							sops: age: client.filesystem.".sops/age/keys.txt".read.contents
+						}
+						if client.env.COMPOSE_FORCE_EXEC != _|_ {
+							always: true
 						}
 					}
 			}
