@@ -8,7 +8,7 @@ A [Dagger](https://dagger.io/) module for managing and deploying [Docker Compose
 1. Create `manifests` directory under root fo the project directory and puts all docker compose and all related files there. You can create as many subfolder as needed.
 1. Create `.ssh` folder that _at minimum_ contains ssh private key named `id_rsa`.
 1. Import and unify the [`#DDCompose.plan`](./ddcompose.cue#L15) with [`dagger.#Plan`](https://docs.dagger.io/1202/plan)
-1. Fill [`#DDCompose.manifests`] with information related to all manifests in `manifests` directory. See [#Manifest](./input.cue#L8) for all avaialable fields.
+1. Fill [`#DDCompose.manifests`](./ddcompose.cue#L8) with information related to all manifests in `manifests` directory. See [#Manifest](./input.cue#L8) for all avaialable fields.
 1. Execute `dagger do deploy` to deploy all defined manifests.
 
 ### Example
@@ -23,7 +23,7 @@ manifests/host1.example.test/awesome-service/settings.conf
 manifests/host1.example.test/awesome-service/docker-compose.yml
 ```
 
-To deploy this manifest to `host1.example.test` and put all the manifest files inside `/opt/docker/awesome-service`, the importing cue file should look like this
+To deploy this manifest to `host1.example.test` and put all the manifest files inside `/opt/docker/awesome-service`, the cue file should look like this
 
 ```cue
 package main
@@ -60,7 +60,7 @@ This allow for controlling which manifest(s) to be deployed. For example:
 
 ### The `fenvname` action
 
-The `fenvname` action is used to generate a text file containing a list of files or folders inside `manifests` folders with their respective generated-variable name. This variable name can be included in docker compose file to force recreate of the related container when the content of the correlated file or folder changes. See [examples](./examples/simple-with-builders/manifests/service/) for more detail on how to include the [fenv](./examples/simple-with-builders/_output/fenv.txt) inside [docker compose file](./examples/simple-with-builders/manifests/service/docker-compose.yml#L6).
+The `fenvname` action is used to generate a text file containing a list of files or folders inside `manifests` folders with their respective generated-variable name. This variable name can be included in docker compose file to force recreate the related container when the content of the correlated file or folder changes. See [examples](./examples/simple-with-builders/manifests/service/) for more detail on how to include the [fenv](./examples/simple-with-builders/_output/fenv.txt) inside [docker compose file](./examples/simple-with-builders/manifests/service/docker-compose.yml#L6).
 
 ### SOPS decryption
 
