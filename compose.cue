@@ -31,28 +31,8 @@ _#compose: {
 }
 
 #Compose: _#compose & {
-	manifest: _, ssh: _, sops: _
-
-	_config: _#compose & {
-		"manifest": manifest, "ssh": ssh, "sops": sops
-
-		always: true
-		command: {
-			name: "/bin/bash"
-			flags: "-c": """
-				set -euo pipefail
-
-				docker compose config | md5sum | tee /tmp/config
-				"""
-		}
-		export: directories: "/tmp/config": _
-	}
-
-	env: COMPOSE_SKIP_RSYNC: "true"
-	mounts: config: {
-		dest:     "/tmp/config"
-		contents: _config.export.directories."/tmp/config"
-	}
+	manifest: _
+	always:   true
 	command: {
 		name: "docker"
 		if manifest.present {
