@@ -10,6 +10,8 @@ import (
 		config: bool | *false
 		age:    bool | *false
 	}
+	docker: config: bool | *false
+
 	builders: bool | *false
 
 	plan: dagger.#Plan & {
@@ -34,6 +36,10 @@ import (
 			}
 			if sops.age {
 				".sops/age/keys.txt": read: contents: dagger.#Secret
+			}
+
+			if docker.config {
+				".docker/config.json": read: contents: dagger.#Secret
 			}
 		}
 
@@ -75,6 +81,9 @@ import (
 						}
 						if sops.age {
 							sops: age: client.filesystem.".sops/age/keys.txt".read.contents
+						}
+						if docker.config {
+							docker: config: client.filesystem.".docker/config.json".read.contents
 						}
 					}
 			}

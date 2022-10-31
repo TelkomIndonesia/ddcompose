@@ -12,6 +12,7 @@ dagger.#Plan & (ddcompose.#DDCompose & {
 		age:    true
 	}
 	builders: true
+	docker: config: true
 	manifests: [
 		{
 			name:       "awesome-service"
