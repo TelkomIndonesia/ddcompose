@@ -58,6 +58,10 @@ This allow for controlling which manifest(s) to be deployed. For example:
 - `dagger do deploy awesome-service host1.example.test` will deploy all manifest named `awesome-service` only to `host1.example.test`.
 - `dagger do deploy awesome-service host1.example.test /opt/docker/awesome-service` will deploy all manifest named `awesome-service` only to `host1.example.test` and only to path `/opt/docker/awesome-service`.
 
+#### Docker config
+
+Under the hood, the `deploy` action wraps `docker compose` command to deploy the manifest. To add additional config for the docker client (such as authentication for remote registry), set [`#DDCompose.docker.config`](/ddcompose.cue#14) to `true` and put the config inside `.docker/config.json`.
+
 ### The `fenvname` action
 
 The `fenvname` action is used to generate a text file containing a list of files or folders inside `manifests` folders with their respective generated-variable name. This variable name can be included in docker compose file to force recreate the related container when the content of the correlated file or folder changes. See [examples](./examples/simple-with-builders/manifests/service/) for more detail on how to include the [fenv](./examples/simple-with-builders/_output/fenv.txt) inside [docker compose file](./examples/simple-with-builders/manifests/service/docker-compose.yml#L6).
@@ -70,4 +74,4 @@ The module support automatic file decryption for all files with `__sops__` prefi
 
 An optional action named `build` can be enabled by setting [`#DDCompose.builders`](./ddcompose.cue#L13) to `true` which allow an execution of [terraform](https://github.com/hashicorp/terraform) scripts inside `builders` folder. During execution, the terraform scripts will have access to the manifests directory whose path can be accessed by defining a variable named [`manifests_dir`](./terraform.cue#L75).
 
-If `#DDCompose.sops.config` is set to true (which require `.sops.yaml` file to be available on the root directory), then `terraform.tfstate` will be encrypted as `__sops__terraform.tfstate` after each execution and the original `terraform.tfstate` will be deleted. See [examples](./examples/simple-with-builders/builders/) for more detail.
+If `#DDCompose.sops.config` is set to `true` (which require `.sops.yaml` file to be available on the root directory), then `terraform.tfstate` will be encrypted as `__sops__terraform.tfstate` after each execution and the original `terraform.tfstate` will be deleted. See [examples](./examples/simple-with-builders/builders/) for more detail.

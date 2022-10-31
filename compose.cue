@@ -1,15 +1,17 @@
 package ddcompose
 
 import (
-	"universe.dagger.io/docker"
+	dockerDagger "universe.dagger.io/docker"
+	"dagger.io/dagger"
 )
 
 _#compose: {
 	manifest: #Manifest
 	ssh:      #SSH
 	sops:     #SOPS
+	docker: config?: dagger.#Secret
 
-	docker.#Run & {
+	dockerDagger.#Run & {
 		_input:  _#image
 		input:   _input.output
 		workdir: manifest.remotePath
@@ -20,6 +22,12 @@ _#compose: {
 		mounts: {
 			(ssh & {dest: "/root/.ssh"}).mounts
 			(sops & {dest: "/root/.config/sops"}).mounts
+			if docker.config != _|_ {
+				"config": {
+					dest:     "/root/.docker/config.json"
+					contents: docker.config
+				}
+			}
 
 			source: {
 				dest:     workdir
