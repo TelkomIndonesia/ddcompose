@@ -13,8 +13,6 @@ import (
 	name: string
 	// Relative path in the `source` that contains the manifest files
 	path: string
-	// Local files or folder to be excluded from synchronization to remote host
-	excludes: [...string]
 	// When `present` is false, the manifest will be destroyed via `docker compose down`
 	present: bool | *true
 	// The remote host where the manifest files will be sync to and deployed

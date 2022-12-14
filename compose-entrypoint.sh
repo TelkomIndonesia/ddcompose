@@ -17,10 +17,15 @@ fi
 # rsync if we are talking to remote docker via ssh
 if [[ "${DOCKER_HOST:-""}" == "ssh://"* ]] && [[ "$COMPOSE_SKIP_RSYNC" == "false" ]]; then
     rsync -av "${PWD}/" "${DOCKER_HOST#"ssh://"}:${PWD}" \
+        --delete \
         --exclude "__sops__*" \
         $(for FILE in $COMPOSE_ADD_ENV_FILES; do
             echo -n "--exclude $FILE "
-        done)
+        done) \
+        $(if [ -f .rsync-exclude ]; then 
+            echo -n "--exclude .rsync-exclude "
+            echo -n "--exclude-from .rsync-exclude "
+        fi)
 fi
 
 # load additional env

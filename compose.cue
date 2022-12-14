@@ -35,6 +35,7 @@ _#compose: {
 				source:   manifest.path
 			}
 		}
+		entrypoint: ["/scripts/compose-entrypoint.sh"]
 	}
 }
 
