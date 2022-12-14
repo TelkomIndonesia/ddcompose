@@ -58,6 +58,10 @@ This allow for controlling which manifest(s) to be deployed. For example:
 - `dagger do deploy awesome-service host1.example.test` will deploy all manifest named `awesome-service` only to `host1.example.test`.
 - `dagger do deploy awesome-service host1.example.test /opt/docker/awesome-service` will deploy all manifest named `awesome-service` only to `host1.example.test` and only to path `/opt/docker/awesome-service`.
 
+#### Manifest Files Synchronization
+
+Since 0.8.0, synchronization is done using rsync with `--delete` flag. Exclusion is possible by creating `.rsync-exclude` file inside the root dir of each manifest path, which will be passed as argument to `--exclude-from` flag.
+
 #### Docker config
 
 Under the hood, the `deploy` action wraps `docker compose` command to deploy the manifest. To add additional config for the docker client (such as authentication for remote registry), set [`#DDCompose.docker.config`](/ddcompose.cue#14) to `true` and put the config inside `.docker/config.json`.
