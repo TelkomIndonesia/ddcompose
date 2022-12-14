@@ -41,10 +41,6 @@ _#image: {
 		source:   "/usr/local/bin/sops"
 		dest:     "/usr/local/bin/sops"
 	}
-	_entrypoint: docker.#Set & {
-		input: _sops.output
-		config: entrypoint: ["/scripts/docker-entrypoint.sh"]
-	}
 
-	output: _entrypoint.output
+	output: _sops.output
 }
