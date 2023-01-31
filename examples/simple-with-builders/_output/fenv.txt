@@ -1,12 +1,4 @@
-=== awesome-service__host1.example.test___opt_docker_awesome-service ===
-./.rsync-exclude => __FILE_3a0f09c347b975244a5758c528a1b432
-./config.yml => __FILE_a8a70b57aceff7dd75fcca01135b59e2
-./__sops__.secret.env => __FILE_40b01327f5de43cae12e4651e44d8092
-./docker-compose.yml => __FILE_abc00eecb4760247f459609bea48577c
-./.secret.env => __FILE_b6661c1ab17d9095a2ace74aeae38c37
-. => __FOLDER_5058f1af8388633f609cadb75a75dc9d
-
-=== awesome-service__host2.example.test___opt_docker_awesome-service ===
+=== service ===
 ./.rsync-exclude => __FILE_3a0f09c347b975244a5758c528a1b432
 ./config.yml => __FILE_a8a70b57aceff7dd75fcca01135b59e2
 ./__sops__.secret.env => __FILE_40b01327f5de43cae12e4651e44d8092

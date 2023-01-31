@@ -15,8 +15,8 @@ import (
 		workdir: "/mnt"
 		mounts: {
 			for manifest in manifests {
-				"\(manifest.remoteHost)--\(manifest.remotePath)": {
-					dest:     "\(workdir)/" + strings.Replace("\(manifest.name)__\(manifest.remoteHost)__\(manifest.remotePath)", "/", "_", -1)
+				"\(manifest.path)": {
+					dest:     "\(workdir)/" + strings.Replace("\(manifest.path)", "/", "_", -1)
 					contents: manifest.source
 					source:   manifest.path
 				}
