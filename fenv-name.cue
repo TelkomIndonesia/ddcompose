@@ -7,6 +7,7 @@ import (
 
 #FenvName: {
 	manifests: [...#Manifest]
+	sops: #SOPS
 
 	docker.#Run & {
 		_input:  _#image
@@ -20,22 +21,9 @@ import (
 					source:   manifest.path
 				}
 			}
+			(sops & {dest: "/root/.config/sops"}).mounts
 		}
-		entrypoint: []
-		command: {
-			name: "bash"
-			flags: "-c": """
-				set -euo pipefail
-
-				for DIR in */ ; do
-					cd "$DIR"
-					echo "=== $(basename $DIR) ===" >> /tmp/fenv.txt
-					/scripts/fenv-name.sh | tee -a /tmp/fenv.txt
-					echo >> /tmp/fenv.txt
-					cd ..
-				done
-				"""
-		}
+		entrypoint: ["/scripts/fenv-name-entrypoint.sh"]
 		export: directories: "/tmp/fenv.txt": _
 	}
 }
