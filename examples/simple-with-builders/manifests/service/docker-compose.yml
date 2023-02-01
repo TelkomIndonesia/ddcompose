@@ -4,5 +4,8 @@ services:
     restart: unless-stopped
     environment:
       __FILE_ce005df09f91dde391f6a6c57899c3c0: # config.yml
+    working_dir: /src
+    volumes:
+      - ${DDCOMPOSE_MANIFEST_VOLUME:-.}:/src
     entrypoint: ["tail","-f"]
     command: /dev/null
