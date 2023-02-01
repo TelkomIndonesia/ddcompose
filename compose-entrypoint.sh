@@ -22,7 +22,7 @@ if [[ "${DOCKER_HOST:-""}" == "ssh://"* ]] && [[ "$COMPOSE_SKIP_RSYNC" == "false
         $(for FILE in $COMPOSE_ADD_ENV_FILES; do
             echo -n "--exclude $FILE "
         done) \
-        $(if [ -f .rsync-exclude ]; then 
+        $(if [ -f .rsync-exclude ]; then
             echo -n "--exclude .rsync-exclude "
             echo -n "--exclude-from .rsync-exclude "
         fi)

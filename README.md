@@ -66,6 +66,10 @@ Since 0.8.0, synchronization is done using rsync with `--delete` flag. Exclusion
 
 Under the hood, the `deploy` action wraps `docker compose` command to deploy the manifest. To add additional config for the docker client (such as authentication for remote registry), set [`#DDCompose.docker.config`](/ddcompose.cue#14) to `true` and put the config inside `.docker/config.json`.
 
+#### Local Docker Daemon
+
+It is also possible to deploy the manifest to the local host where the command is executed. To do this, do not set the `remoteHost` `remotePath` attribute of the manifest.
+
 ### The `fenvname` action
 
 The `fenvname` action is used to generate a text file containing a list of files or folders inside `manifests` folders with their respective generated-variable name. This variable name can be included in docker compose file to force recreate the related container when the content of the correlated file or folder changes. See [examples](./examples/simple-with-builders/manifests/service/) for more detail on how to include the [fenv](./examples/simple-with-builders/_output/fenv.txt) inside [docker compose file](./examples/simple-with-builders/manifests/service/docker-compose.yml#L6).
