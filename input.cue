@@ -16,9 +16,9 @@ import (
 	// When `present` is false, the manifest will be destroyed via `docker compose down`
 	present: bool | *true
 	// The remote host where the manifest files will be sync to and deployed
-	remoteHost: string
+	remoteHost?: string
 	// The remote path where the manifest files will be sync to
-	remotePath: string
+	remotePath?: string
 	// Additional environment to be passed to `docker compose`
 	env: [envname = string]: string | dagger.#Secret
 }

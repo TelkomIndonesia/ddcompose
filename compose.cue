@@ -9,15 +9,26 @@ _#compose: {
 	manifest: #Manifest
 	ssh:      #SSH
 	sops:     #SOPS
-	docker: config?: dagger.#Secret
+	docker: {
+		config?: dagger.#Secret
+		socket?: dagger.#Socket
+	}
 
 	dockerDagger.#Run & {
-		_input:  _#image
-		input:   _input.output
-		workdir: manifest.remotePath
-		env: {
-			manifest.env
-			"DOCKER_HOST": "ssh://\(manifest.remoteHost)"
+		_input: _#image
+		input:  _input.output
+		workdir: {
+			if manifest.remotePath != _|_ {
+				manifest.remotePath
+			}
+			if manifest.remotePath == _|_ {
+				env.LOCAL_PWD
+			}
+		}
+		env: manifest.env & {
+			if manifest.remoteHost != _|_ {
+				"DOCKER_HOST": "ssh://\(manifest.remoteHost)"
+			}
 		}
 		mounts: {
 			(ssh & {dest: "/root/.ssh"}).mounts
@@ -26,6 +37,12 @@ _#compose: {
 				"config": {
 					dest:     "/root/.docker/config.json"
 					contents: docker.config
+				}
+			}
+			if docker.socket != _|_ {
+				"docker": {
+					dest:     "/var/run/docker.sock"
+					contents: docker.socket
 				}
 			}
 

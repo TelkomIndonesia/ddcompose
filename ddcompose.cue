@@ -42,6 +42,11 @@ import (
 				".docker/config.json": read: contents: dagger.#Secret
 			}
 		}
+		client: env: {
+			PWD:  string
+			HOME: string
+		}
+		client: network: "unix:///var/run/docker.sock": connect: dagger.#Socket
 
 		actions: fenvname: #FenvName & {
 			"manifests": [
@@ -72,23 +77,41 @@ import (
 		}
 
 		actions: deploy: {
+			_compose: {
+				ssh: {
+					config:     client.filesystem.".ssh".read.contents
+					privateKey: client.filesystem.".ssh/id_rsa".read.contents
+				}
+				if sops.age {
+					sops: age: client.filesystem.".sops/age/keys.txt".read.contents
+				}
+				if docker.config {
+					docker: config: client.filesystem.".docker/config.json".read.contents
+				}
+				env: {
+					LOCAL_PWD:  client.env.PWD
+					LOCAL_HOME: client.env.HOME
+				}
+			}
 			for manifest in manifests {
-				(manifest.name): (manifest.remoteHost): (manifest.remotePath):
-					#Compose & {
-						"manifest": manifest & {
-							source: client.filesystem."manifests".read.contents
-						}
-						ssh: {
-							config:     client.filesystem.".ssh".read.contents
-							privateKey: client.filesystem.".ssh/id_rsa".read.contents
-						}
-						if sops.age {
-							sops: age: client.filesystem.".sops/age/keys.txt".read.contents
-						}
-						if docker.config {
-							docker: config: client.filesystem.".docker/config.json".read.contents
+				(manifest.name): {
+					if manifest.remoteHost != _|_ && manifest.remotePath != _|_ {
+						(manifest.remoteHost): (manifest.remotePath): #Compose & _compose & {
+							"manifest": manifest & {
+								source: client.filesystem."manifests".read.contents
+							}
 						}
 					}
+
+					if manifest.remoteHost == _|_ || manifest.remotePath == _|_ {
+						"_": "_": #Compose & _compose & {
+							"manifest": manifest & {
+								source: client.filesystem."manifests".read.contents
+							}
+							docker: socket: client.network."unix:///var/run/docker.sock".connect
+						}
+					}
+				}
 			}
 		}
 
