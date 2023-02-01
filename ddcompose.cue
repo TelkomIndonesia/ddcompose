@@ -89,8 +89,8 @@ import (
 					docker: config: client.filesystem.".docker/config.json".read.contents
 				}
 				env: {
-					LOCAL_PWD:  client.env.PWD
-					LOCAL_HOME: client.env.HOME
+					DDCOMPOSE_PWD:  client.env.PWD
+					DDCOMPOSE_HOME: client.env.HOME
 				}
 			}
 			for manifest in manifests {

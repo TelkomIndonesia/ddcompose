@@ -70,6 +70,15 @@ Under the hood, the `deploy` action wraps `docker compose` command to deploy the
 
 It is also possible to deploy the manifest to the local host where the command is executed. To do this, do not set the `remoteHost` `remotePath` attribute of the manifest.
 
+In this mode, a docker volume will be generated that will contain the modified manifest filesß. This volume can then be used in docker-compose by using `DDCOMPOSE_MANIFEST_VOLUME` env variable, for example
+
+```yaml
+services:
+    certain-service:
+        volumes:
+            - ${DDCOMPOSE_MANIFEST_VOLUME:-.}:/src
+```
+
 ### The `fenvname` action
 
 The `fenvname` action is used to generate a text file containing a list of files or folders inside `manifests` folders with their respective generated-variable name. This variable name can be included in docker compose file to force recreate the related container when the content of the correlated file or folder changes. See [examples](./examples/simple-with-builders/manifests/service/) for more detail on how to include the [fenv](./examples/simple-with-builders/_output/fenv.txt) inside [docker compose file](./examples/simple-with-builders/manifests/service/docker-compose.yml#L6).

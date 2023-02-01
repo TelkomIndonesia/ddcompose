@@ -22,7 +22,7 @@ _#compose: {
 				manifest.remotePath
 			}
 			if manifest.remotePath == _|_ {
-				"\(env.LOCAL_PWD)/manifests/\(manifest.path)"
+				"\(env.DDCOMPOSE_PWD)/manifests/\(manifest.path)"
 			}
 		}
 		env: manifest.env & {
